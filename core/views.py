@@ -172,8 +172,6 @@ def details(request, id):
     data['ListaCarrito'] = carrito_usuario
 
     return render(request, 'core/details.html', data)
-##def usuario(request):
-    ##return render(request, 'registration/usuario.html')
 
 def registro(request):
     data = {
@@ -286,59 +284,39 @@ def aprobado(request):
 
 @login_required
 def subs(request):
+    suscripcion = Suscripcion.objects.filter(usuario=request.user).first()
+    is_suscribed = True if suscripcion else False
+    
     if request.method == 'POST':
-        form = SuscripcionForm(request.POST)
-        if form.is_valid():
-            suscripcion = form.save(commit=False)
-            suscripcion.usuario = request.user
-            suscripcion.fecha_inicio = date.today()  # Establecer la fecha de inicio como el día actual
-            # Calcular la fecha de vencimiento sumando un mes a la fecha de inicio
-            suscripcion.fecha_vencimiento = suscripcion.fecha_inicio + timedelta(days=30)
-            suscripcion.save()
-            
-            pago_exitoso = True
-
-            if pago_exitoso:
-                suscripcion.estado = True  # Actualizar el estado de la suscripción
+        if is_suscribed:
+            # Acción de desuscripción
+            suscripcion.delete()
+            return render(request, 'core/desuscripcion_exitosa.html')
+        else:
+            form = SuscripcionForm(request.POST)
+            if form.is_valid():
+                suscripcion = form.save(commit=False)
+                suscripcion.usuario = request.user
+                suscripcion.fecha_inicio = date.today()
+                suscripcion.fecha_vencimiento = suscripcion.fecha_inicio + timedelta(days=30)
+                suscripcion.estado = True  # Establecer el estado de suscripción como True
                 suscripcion.save()
 
-                return redirect('aprobado')
-            else:
-                # Manejar caso de pago fallido
-                suscripcion.delete()  # Eliminar la suscripción si el pago falla
-                return redirect('pago_fallido')
+                return render(request, 'core/aprobado.html')
     else:
         form = SuscripcionForm(initial={'fecha_inicio': date.today()})
 
-    return render(request, 'core/subs.html', {'form': form})
+    return render(request, 'core/subs.html', {'form': form, 'is_suscribed': is_suscribed})
+
+
+
 
 @login_required
 def subsModificada(request):
-    if request.method == 'POST':
-        form = SuscripcionForm(request.POST)
-        if form.is_valid():
-            suscripcion = form.save(commit=False)
-            suscripcion.usuario = request.user
-            suscripcion.fecha_inicio = date.today()  # Establecer la fecha de inicio como el día actual
-            # Calcular la fecha de vencimiento sumando un mes a la fecha de inicio
-            suscripcion.fecha_vencimiento = suscripcion.fecha_inicio + timedelta(days=30)
-            suscripcion.save()
-            
-            pago_exitoso = True
+    suscripcion = get_object_or_404(Suscripcion, usuario=request.user)
+    suscripcion.delete()
 
-            if pago_exitoso:
-                suscripcion.estado = 'Activa'  # Actualizar el estado de la suscripción
-                suscripcion.save()
-
-                return redirect('aprobado')
-            else:
-                # Manejar caso de pago fallido
-                suscripcion.delete()  # Eliminar la suscripción si el pago falla
-                return redirect('pago_fallido')
-    else:
-        form = SuscripcionForm(initial={'fecha_inicio': date.today()})
-
-    return render(request, 'core/subs.html', {'form': form})
+    return render(request, 'core/subsModificada.html')
 
 ######################## CRUD ########################
 @login_required
