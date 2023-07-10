@@ -313,13 +313,18 @@ def subs(request):
                 suscripcion.estado = True  # Establecer el estado de suscripción como True
                 suscripcion.save()
 
+<<<<<<< HEAD
                 return render(request, 'core/pagoSubs.html')
+=======
+                return render(request, 'core/aprobado.html')
+>>>>>>> 0aeb5a871a2c633f39add9d4f4a74dd75209763b
     else:
         form = SuscripcionForm(initial={'fecha_inicio': date.today()})
 
     return render(request, 'core/subs.html', {'form': form, 'is_suscribed': is_suscribed})
 
 
+<<<<<<< HEAD
 @login_required
 def pagoSubs(request):
     return render(request, 'core/pagoSubs.html')
@@ -327,6 +332,9 @@ def pagoSubs(request):
 @login_required
 def subsAprobada(request):
     return render(request, 'core/subsAprobada.html')
+=======
+
+>>>>>>> 0aeb5a871a2c633f39add9d4f4a74dd75209763b
 
 @login_required
 def subsModificada(request):
