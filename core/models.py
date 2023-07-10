@@ -60,3 +60,6 @@ class Suscripcion(models.Model):
     fecha_inicio = models.DateField()
     fecha_vencimiento = models.DateField(null=True)
     estado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.usuario.username

@@ -94,7 +94,11 @@
                     <a href="{% url 'contacto' %}" class="nav-item nav-link">Contactanos</a>
                     <a href="{% url 'seguimiento' %}" class="nav-item nav-link">Seguimiento de compra</a>
                     <a href="{% url 'historial' %}" class="nav-item nav-link">Historial de compra</a>
-                    <a href="{% url 'subs' %}" class="nav-item nav-link">Suscribirse</a>
+                    {% if is_suscribed %}
+                        <a href="{% url 'subsModificada' %}" class="av-item nav-link">Modificar suscripción</a>
+                    {% else %}
+                        <a href="{% url 'subs' %}" class="av-item nav-link">Suscribirse</a>
+                    {% endif %}
                 </div>
                 <div class="d-none d-lg-flex ms-2">
                     {% if user.is_authenticated %}

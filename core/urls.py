@@ -7,6 +7,8 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('productos', ProductoViewset)
 router.register('tipoproductos', TipoProductoViewset)
+router.register('tiposubs', TipoSubViewsets)
+router.register('historialviewsets', HistorialViewsets)
 
 urlpatterns = [
     #api
@@ -24,9 +26,11 @@ urlpatterns = [
     path('indexapi', indexapi, name="indexapi"),
     path('subs/', subs, name="subs"),
     path('subsModificada/', subsModificada, name="subsModificada"),
+    path('subsAprobada/', subsAprobada, name="subsAprobada"),
     path('details/<id>/', details, name='details'),
     path('EliminaProd/<id>/', EliminaProd, name="EliminaProd"),
     path('historial/', historial, name="historial"),
+    path('pagoSubs/', pagoSubs, name="pagoSubs"),
 
     #CRUD
     path('add/', add, name='add'),

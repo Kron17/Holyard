@@ -14,4 +14,12 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = '__all__'
 
+class TipoSubSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Suscripcion
+        fields = '__all__'
 
+class HistorialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistorialCompra
+        fields = '__all__'
